@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-11-18T22:00:00.000Z",
+  "organization": "BancorDigital",
+  "project": "Soluciones",
+  "stats": {
+    "total_features": 1,
+    "total_user_stories": 1,
+    "by_platform": {
+      "mobile": 1,
+      "web": 0
+    }
+  },
+  "features": {
+    "44719": {
+      "id": 44719,
+      "title": "Valores - Mobile - Consulta ECHEQ Recibidos/ Emitidos/ Endosados/ Cedidos",
+      "platform": "mobile",
+      "functionality": "consulta_echeq",
+      "state": "Active",
+      "ado_rev": 6,
+      "ado_changed_date": "2026-07-14T17:30:34.75Z",
+      "last_synced": "2026-11-18T22:00:00.000Z",
+      "context_file": "input/mobile/consulta_echeq/feature_44719.md",
+      "child_user_stories": [58664, 58682, 62868, 62929, 66152, 66222, 75772, 76389, 78500, 85217, 93567, 96695]
+    }
+  },
+  "user_stories": {
+    "58664": {
+      "id": 58664,
+      "title": "MB - ECHEQ - MENU - Agregar opción Echeq en el menú desplegable",
+      "platform": "mobile",
+      "functionality": "consulta_echeq",
+      "parent_feature_id": 44719,
+      "state": "Active",
+      "area_path": "Soluciones\\TRB-CashManagement\\PRD-VALORES\\SCT-Valores NVA_APP",
+      "iteration_path": "Soluciones\\PI 7\\PI7 - Sprint 4",
+      "assigned_to": "Lizarralde, Ignacio",
+      "tags": "Bloqueado; QA",
+      "active_rev": 22,
+      "available_revs": [22],
+      "ado_changed_date": "2026-11-17T15:04:39.453Z",
+      "ado_changed_by": "Vazquez De La Colina, Matias",
+      "last_synced": "2026-11-18T22:00:00.000Z",
+      "folder_path": "input/mobile/consulta_echeq/58664",
+      "active_file": "input/mobile/consulta_echeq/58664/hu_58664.md",
+      "version_files": {
+        "22": "input/mobile/consulta_echeq/58664/versions/hu_58664_rev22.md"
+      },
+      "raw_file": "input/mobile/consulta_echeq/58664/raw/wit_58664_rev22.json",
+      "attachments_dir": "input/mobile/consulta_echeq/58664/attachments",
+      "attachments_count": 2,
+      "figma_links": [],
+      "qa_status": {
+        "analysis_file": null,
+        "test_cases_file": null
+      }
+    }
+  }
+}

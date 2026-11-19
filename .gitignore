@@ -1,0 +1,15 @@
+# Logs, temporales y dependencias
+*.log
+.DS_Store
+Thumbs.db
+node_modules/
+__pycache__/
+*.pyc
+
+# Snapshots crudos de API / payloads temporales
+input/*/*/*/raw/
+output/testCases/*/*/ado_payloads_*.json
+
+# Credenciales locales si existieran
+.env
+*.pat

@@ -1,0 +1,9 @@
+{
+  "organization": "BancorDigital",
+  "project": "Soluciones",
+  "default_area_code": "CSM_SIF",
+  "default_area_path": "Soluciones\\TRB-CashManagement\\PRD-VALORES\\SCT-Valores NVA_APP",
+  "default_iteration_path": "Soluciones\\PI 7\\PI7 - Sprint 4",
+  "default_assigned_to": "Montiel, Fernando Javier",
+  "default_feature_tag": "qa_feature_echeq"
+}
