@@ -6,10 +6,33 @@ node_modules/
 __pycache__/
 *.pyc
 
-# Snapshots crudos de API / payloads temporales
-input/*/*/*/raw/
-output/testCases/*/*/ado_payloads_*.json
-
-# Credenciales locales si existieran
+# Credenciales y variables de entorno locales
 .env
 *.pat
+
+# ----------------------------------------------------
+# Datos dinámicos de trabajo del usuario (inputs, outputs y memorias)
+# Se conservan únicamente las carpetas estructurales (.gitkeep) y las plantillas base.
+# ----------------------------------------------------
+
+# Insumos descargados de ADO / Figma por cada usuario
+input/*
+!input/.gitkeep
+!input/web/
+!input/mobile/
+!input/web/.gitkeep
+!input/mobile/.gitkeep
+!input/index.json
+!input/INDEX.md
+
+# Salidas generadas por el flujo QA (análisis, casos de prueba CSV, etc.)
+output/*
+!output/.gitkeep
+!output/analysis/
+!output/testCases/
+!output/analysis/.gitkeep
+!output/testCases/.gitkeep
+
+# Memorias dinámicas de agentes (solo se preservan los .gitkeep de las carpetas)
+memories/**/*.md
+!memories/**/.gitkeep
