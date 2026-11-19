@@ -28,3 +28,6 @@ Ningún agente del ecosistema QA puede **asumir, inventar o completar silenciosa
    - Registrar dudas pendientes en `output/testCases/<func>/<ID_HU>/dudas_pendientes_diseno.md`.
 5. **Exportación ADO (`qa_ado_exporter`):**
    - **Jamás crear Work Items en ADO vía API/MCP automáticamente.** Por defecto solo generar el CSV local de 18 columnas. La creación por API/MCP requiere solicitud explícita y aprobación del Checkpoint de resumen.
+6. **Automatización E2E con Playwright (`qa_automation`):**
+   - **Jamás suponer ni inventar locators.** Todo selector debe verificarse inspeccionando el HTML/DOM real de la aplicación mediante `playwright-cli`. Priorizar buenas prácticas (`getByRole`, `getByLabel`, `getByPlaceholder`, `getByText`, `getByTestId`); solo usar `.locator()` con CSS estable cuando aquellos no alcancen. **Prohibido usar XPath** salvo autorización explícita del usuario.
+   - **Jamás inventar una arquitectura nueva.** Seguir estrictamente los lineamientos, estructura de carpetas, Page Objects, fixtures y convenciones del proyecto destino. Ante cualquier duda o vacío arquitectónico, planificar junto al usuario antes de escribir código.

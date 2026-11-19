@@ -1,6 +1,6 @@
 # Instructivo de Uso — AgenteQA (Orquestador Agéntico de QA)
 
-Guía práctica paso a paso para configurar, operar y mantener el ecosistema multi-agente de QA basado en **ISTQB**, **Azure DevOps (ADO)** y **Figma**.
+Guía práctica paso a paso para configurar, operar y mantener el ecosistema multi-agente de QA basado en **ISTQB**, **Azure DevOps (ADO)**, **Figma** y **Playwright**.
 
 ---
 
@@ -8,9 +8,11 @@ Guía práctica paso a paso para configurar, operar y mantener el ecosistema mul
 
 1. **Node.js `>= 20.0`** (verificar con `node -v` y `npx -v`).  
    *Todos los scripts `.js` del proyecto usan librerías nativas de Node.js: no requieren `npm install`.*
-2. **Python `>= 3.8`** *(Opcional — solo necesario si ejecutas los scripts de paralelismo `batch_*_workflow.py` mediante `run_workflow` para lotes de 3+ HUs).*
-3. **Acceso a Azure DevOps** (con permisos de lectura de Work Items y, si usarás exportación por API, escritura de Work Items / Test Plans).
-4. **Acceso a Figma** (cuenta miembro de la organización con permiso de visualización sobre los archivos de diseño).
+2. **Playwright `>= 1.59` / `playwright-cli`** *(Requerido para automatización E2E en Nivel 6 con `qa_automation`)*:  
+   - Verificar en el repositorio de pruebas destino con `npx --no-install playwright --version` o instalar el CLI globalmente con `npm install -g @playwright/cli@latest`.
+3. **Python `>= 3.8`** *(Opcional — solo necesario si ejecutas los scripts de paralelismo `batch_*_workflow.py` mediante `run_workflow` para lotes de 3+ HUs).*
+4. **Acceso a Azure DevOps** (con permisos de lectura de Work Items y, si usarás exportación por API, escritura de Work Items / Test Plans).
+5. **Acceso a Figma** (cuenta miembro de la organización con permiso de visualización sobre los archivos de diseño).
 
 ---
 
@@ -66,7 +68,7 @@ Instala y autentica el plugin oficial de **Figma** desde el Marketplace de Antig
 
 ---
 
-## 3. Cómo Operar el Orquestador en el Día a Día (Workflows `WF-01` a `WF-06`)
+## 3. Cómo Operar el Orquestador en el Día a Día (Workflows `WF-01` a `WF-07`)
 
 El punto de entrada recomendado es hablar siempre con el **QA Lead Sr (`/qa_orchestrator`)**, quien diagnostica `input/index.json`, te propone el **Plan Estratégico (Checkpoint 0)** y delega en el equipo especialista.
 
@@ -81,6 +83,8 @@ El punto de entrada recomendado es hablar siempre con el **QA Lead Sr (`/qa_orch
 | **Exportar directo a ADO por API (XML Steps)** | `WF-04` | *"`/qa_ado_exporter` Exporta y crea los Test Cases de la HU 58664 directamente en Azure DevOps vinculándolos a la HU."* |
 | **Ciclo E2E Completo** | `WF-05` | *"`/qa_orchestrator` Trabajemos punta a punta la HU 58664 desde la importación hasta los casos listos para importar en ADO."* |
 | **Actualizar tras cambio de versión (`rev`)** | `WF-06` | *"`/qa_orchestrator` La HU 58664 cambió en ADO. Sincroniza la nueva versión, calcula el diff y actualiza solo lo impactado."* |
+| **Automatizar casos diseñados con Playwright** | `WF-07` | *"`/qa_automation` Automatiza los casos de Smoke y Camino Positivo de la HU 58664 (`output/testCases/consulta_echeq/58664/`) sobre el proyecto `./e2e-web`."* |
+| **Automatizar o mantener tests según indicación** | `WF-07` | *"`/qa_automation` Mantén y repara el test `tests/echeq/emision.spec.ts` revisando el HTML real con `playwright-cli` y respetando la arquitectura del proyecto."* |
 
 ---
 
@@ -91,7 +95,12 @@ El punto de entrada recomendado es hablar siempre con el **QA Lead Sr (`/qa_orch
    - Nunca sobrescribe una versión local (`rev`) de una HU ni capturas de Figma sin preguntarte.
    - Siempre confirma **Release**, **Código de Área (`CSM_SIF`)**, **Capas (`FE`, `BFF` Web/Mobile, `API` agnóstica)** y **Estrategia de Distribución por SO/Dispositivos (`Android`/`iOS`, `Smartphone`/`Tablet`/`iPad`/`Desktop`)**.
    - Nunca crea Work Items en Azure DevOps por API a menos que lo pidas explícitamente y apruebes el resumen final.
-3. **Economía de Tokens:**
+3. **Restricciones Estrictas de Automatización con Playwright (`qa_automation` + `playwright-cli`):**
+   - **Prohibido suponer locators:** El agente inspecciona obligatoriamente el HTML/DOM real de la página (`playwright-cli snapshot`, `generate-locator`, `eval`).
+   - **Jerarquía de locators:** Prioriza siempre las buenas prácticas de Playwright (`getByRole`, `getByLabel`, `getByPlaceholder`, `getByText`, `getByTestId`). Solo si no funcionan contra el DOM real pasa a `.locator()` con CSS estable + `.filter()`.
+   - **Prohibido XPath:** Se evita XPath en todo momento; solo se utiliza si el usuario lo autoriza explícitamente tras revisar el HTML real.
+   - **Prohibido inventar arquitectura:** El agente audita y sigue estrictamente la arquitectura y lineamientos del proyecto destino (POM, Fixtures, Screenplay, etc.). Ante cualquier duda, planifica junto al usuario los pasos a seguir.
+4. **Economía de Tokens:**
    - **1 a 2 HUs:** Se ejecutan en línea en tu conversación actual (cero overhead de subagentes).
    - **3+ HUs:** El Orquestador te ofrece elegir entre **Modo Paralelo** (`run_workflow` con retorno por puntero de archivo) o **Modo Secuencial**.
 
@@ -136,6 +145,12 @@ node .agents/skills/qa_ado_exporter/scripts/export_to_ado_api.js prepare \
 node .agents/skills/qa_ado_exporter/scripts/export_to_ado_api.js execute \
   --payloads output/testCases/consulta_echeq/58664/ado_payloads_58664.json \
   --hu-id 58664
+
+# 9. Auditar arquitectura existente de un proyecto Playwright destino (0 tokens LLM — WF-07)
+node .agents/skills/qa_automation/scripts/inspect_playwright_project.js ./ruta-a-proyecto-playwright
+
+# 10. Auditar locators Playwright (jerarquía semántica vs .locator, bloqueo de XPath y sleeps — WF-07)
+node .agents/skills/qa_automation/scripts/audit_playwright_locators.js ./ruta-a-proyecto-playwright/tests
 ```
 
 ---

@@ -24,6 +24,7 @@
 | **Nivel 3** | Análisis Estático y Triangulación | `qa_analytics` | `[Nx]` | `[Paralelo / Secuencial]` | 1 instancia por HU para triangular Texto HU vs. Adjuntos ADO vs. Figma |
 | **Nivel 4** | Diseño Funcional ISTQB | `qa_designer` | `[Nx]` | `[Paralelo / Secuencial]` | Diseño de 11 categorías aplicando acuerdos globales de Release, Área y Dispositivos |
 | **Nivel 5** | Transformación y Exportación ADO | `qa_ado_exporter` | `[1x]` | `[Consolidado]` | Generar CSV 18 columnas RFC 4180 (y exportación XML por API si se solicita) |
+| **Nivel 6** | Automatización y Mantenimiento E2E | `qa_automation` | `[1x / Nx]` | `[Secuencial con playwright-cli]` | Automatizar/mantener tests inspeccionando el HTML real y siguiendo la arquitectura del proyecto |
 
 ---
 

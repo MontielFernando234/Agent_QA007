@@ -26,6 +26,7 @@ Para evitar el crecimiento descontrolado de tokens a lo largo del tiempo:
 - **`qa_analytics`:** `memories/qa_analytics/memoria_qa_analytics.md`
 - **`qa_designer`:** `memories/qa_designer/memoria_qa_designer.md`
 - **`qa_ado_exporter`:** `memories/qa_ado_exporter/memoria_qa_ado_exporter.md`
+- **`qa_automation`:** `memories/qa_automation/memoria_qa_automation.md`
 - **Archivo Histórico (Solo lectura bajo demanda):** `memories/archive/`
 
 ---

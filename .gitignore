@@ -36,3 +36,5 @@ output/*
 # Memorias dinámicas de agentes (solo se preservan los .gitkeep de las carpetas)
 memories/**/*.md
 !memories/**/.gitkeep
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

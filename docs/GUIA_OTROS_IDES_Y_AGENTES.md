@@ -33,7 +33,7 @@ Si deseas utilizar este mismo ecosistema QA en **Claude Code**, **VS Code (GitHu
      - `.agents/rules/arquitectura_insumos_tokens.md`
      - `.agents/rules/orquestacion_y_jerarquia_agentes.md`
      ```
-   - Opcionalmente, copia las 5 rules contextuales (`criterios_web_y_mobile.md`, `nomenclatura_casos_prueba.md`, etc.) a `.github/instructions/<nombre>.instructions.md` cambiando el frontmatter a `applyTo: "**"`.
+   - Opcionalmente, copia las 6 rules contextuales (`criterios_web_y_mobile.md`, `nomenclatura_casos_prueba.md`, `automatizacion_playwright_locators.md`, etc.) a `.github/instructions/<nombre>.instructions.md` cambiando el frontmatter a `applyTo: "**"`.
 2. **Skills:**
    - VS Code Copilot descubre skills en `.github/skills/<name>/SKILL.md` (puedes copiar o crear un symlink desde `.agents/skills/` hacia `.github/skills/`).
 3. **Configuración MCP (`.vscode/mcp.json`):**
@@ -123,7 +123,7 @@ Si deseas utilizar este mismo ecosistema QA en **Claude Code**, **VS Code (GitHu
    - Copia los archivos de `.agents/rules/*.md` a `.cursor/rules/` con extensión `.mdc`.
    - En el frontmatter de cada `.mdc`:
      - Para las 5 rules `always_on`: reemplazar `trigger: always_on` por `alwaysApply: true`.
-     - Para las 5 rules `model_decision`: reemplazar `trigger: model_decision` por `alwaysApply: false` manteniendo el campo `description`.
+     - Para las 6 rules `model_decision`: reemplazar `trigger: model_decision` por `alwaysApply: false` manteniendo el campo `description`.
 2. **Configuración MCP (`.cursor/mcp.json`):**
    - Usa el mismo esquema JSON `"mcpServers"` que Antigravity y Claude Code.
 
@@ -140,6 +140,8 @@ Independientemente del IDE o modelo de IA que utilices, **el 90% del proyecto fu
   * `validate_test_cases.js` (auditoría automática de CSVs de 12 columnas).
   * `convert_to_ado_csv.js` (conversor a CSV 18 columnas RFC 4180).
   * `export_to_ado_api.js` (conversor XML `Microsoft.VSTS.TCM.Steps` y exportación directa vía REST API de ADO).
+  * `inspect_playwright_project.js` (inspector de arquitectura existente del proyecto Playwright destino).
+  * `audit_playwright_locators.js` (auditor estático de jerarquía de locators Playwright y bloqueo de XPath/sleeps).
 * ✅ Todas las plantillas (`resources/`) y ejemplos (`examples/`).
 * ✅ Todas las rutas relativas internas en los archivos Markdown.
 

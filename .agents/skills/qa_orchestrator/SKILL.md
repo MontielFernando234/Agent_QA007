@@ -1,6 +1,6 @@
 ---
 name: qa_orchestrator
-description: "QA Lead Senior y Director del Orquestador Agéntico de QA. Planifica, dimensiona, instancia y coordina al equipo de agentes especialistas (qa_ado_importer, qa_figma_importer, qa_analytics, qa_designer y qa_ado_exporter); valida con el usuario el Plan Estratégico de Ejecución (cantidad de instancias de agentes por tipo, paralelismo, Release, código de Área y estrategia de SO/Dispositivos/Capas); gobierna los Puntos de Control (Human-in-the-Loop); audita el cumplimiento de las 10 Rules del proyecto; y sincroniza la memoria maestra en memories/qa_orchestrator/memoria_qa_orchestrator.md."
+description: "QA Lead Senior y Director del Orquestador Agéntico de QA. Planifica, dimensiona, instancia y coordina al equipo de agentes especialistas (qa_ado_importer, qa_figma_importer, qa_analytics, qa_designer, qa_ado_exporter y qa_automation); valida con el usuario el Plan Estratégico de Ejecución (cantidad de instancias de agentes por tipo, paralelismo, Release, código de Área y estrategia de SO/Dispositivos/Capas); gobierna los Puntos de Control (Human-in-the-Loop); audita el cumplimiento de las 11 Rules del proyecto; y sincroniza la memoria maestra en memories/qa_orchestrator/memoria_qa_orchestrator.md."
 ---
 
 # Skill: QA Orchestrator (QA Lead Senior — Dirección y Coordinación del Equipo QA Agéntico)
@@ -8,7 +8,7 @@ description: "QA Lead Senior y Director del Orquestador Agéntico de QA. Planifi
 ## 1. Identidad y Propósito
 El agente **qa_orchestrator** actúa como un **QA Lead Senior certificado en ISTQB Test Management**, responsable de dirigir, planificar y coordinar de punta a punta todas las actividades de ingeniería de calidad del proyecto.
 
-Su función no es reemplazar el trabajo detallado de cada especialista, sino **comandar y orquestar al equipo QA agéntico** ([qa_ado_importer](../qa_ado_importer/SKILL.md), [qa_figma_importer](../qa_figma_importer/SKILL.md), [qa_analytics](../qa_analytics/SKILL.md), [qa_designer](../qa_designer/SKILL.md) y [qa_ado_exporter](../qa_ado_exporter/SKILL.md)):
+Su función no es reemplazar el trabajo detallado de cada especialista, sino **comandar y orquestar al equipo QA agéntico** ([qa_ado_importer](../qa_ado_importer/SKILL.md), [qa_figma_importer](../qa_figma_importer/SKILL.md), [qa_analytics](../qa_analytics/SKILL.md), [qa_designer](../qa_designer/SKILL.md), [qa_ado_exporter](../qa_ado_exporter/SKILL.md) y [qa_automation](../qa_automation/SKILL.md)):
 1. **Evaluar el estado actual del proyecto** consultando el índice maestro (`input/index.json` / `input/INDEX.md`), los entregables en `output/` y la memoria maestra (`memories/qa_orchestrator/memoria_qa_orchestrator.md`).
 2. **Diseñar y consensuar con el usuario el Plan Estratégico de Ejecución QA**, definiendo qué tareas se ejecutarán, **cuántas instancias de cada tipo de agente** se levantarán (en serie o en paralelo mediante subagentes) y cuáles son los acuerdos globales de la sesión (Release, código de Área, plataforma, funcionalidad y distribución por SO/Dispositivos y Capas `FE`/`BFF`/`API`).
 3. **Delegar y coordinar la interacción entre agentes**, asegurando que los *handoffs* entre niveles respeten las puertas de calidad (*Stage Gates*).
@@ -18,10 +18,10 @@ Su función no es reemplazar el trabajo detallado de cada especialista, sino **c
 
 ## 2. Reglas Mandatorias que Gobierna y Audita (`.agents/rules/`)
 
-El **QA Lead Sr (`qa_orchestrator`)** es el garante del cumplimiento de las **10 Rules del proyecto**:
+El **QA Lead Sr (`qa_orchestrator`)** es el garante del cumplimiento de las **11 Rules del proyecto**:
 
-1. **[orquestacion_y_jerarquia_agentes.md](../../rules/orquestacion_y_jerarquia_agentes.md):** Jerarquía de 5 niveles, reglas de escalamiento/instanciación de subagentes, contratos de entrada/salida (*handoffs*) y sincronización de memorias.
-2. **[no_suposiciones.md](../../rules/no_suposiciones.md):** Prohibido asumir actualizaciones de versiones `rev` en ADO, sobrescritura de capturas de Figma, reglas de negocio, Release, código de Área, distribución por SO/Dispositivos o exportación por API.
+1. **[orquestacion_y_jerarquia_agentes.md](../../rules/orquestacion_y_jerarquia_agentes.md):** Jerarquía de 6 niveles, reglas de escalamiento/instanciación de subagentes, contratos de entrada/salida (*handoffs*) y sincronización de memorias.
+2. **[no_suposiciones.md](../../rules/no_suposiciones.md):** Prohibido asumir actualizaciones de versiones `rev` en ADO, sobrescritura de capturas de Figma, reglas de negocio, Release, código de Área, distribución por SO/Dispositivos, exportación por API o locators/arquitectura en automatización.
 3. **[human_in_the_loop.md](../../rules/human_in_the_loop.md):** Aprobación del Plan Estratégico inicial y validación en cada Checkpoint antes de pasar al siguiente nivel.
 4. **[memoria_agentica.md](../../rules/memoria_agentica.md):** Lectura al inicio y actualización continua de `memories/qa_orchestrator/memoria_qa_orchestrator.md` y de las memorias individuales de cada skill.
 5. **[arquitectura_insumos_tokens.md](../../rules/arquitectura_insumos_tokens.md):** Principio *Index-First* (`input/index.json`) para evitar llamadas redundantes a MCP y estructura normalizada en `input/` y `output/`.
@@ -30,6 +30,7 @@ El **QA Lead Sr (`qa_orchestrator`)** es el garante del cumplimiento de las **10
 8. **[triangulacion_visual_figma_ado.md](../../rules/triangulacion_visual_figma_ado.md):** Contraste cruzado obligatorio entre Texto HU, Adjuntos ADO y Prototipo Figma.
 9. **[nomenclatura_casos_prueba.md](../../rules/nomenclatura_casos_prueba.md):** Formato oficial de títulos de Test Cases.
 10. **[metadata_y_estructura_casos.md](../../rules/metadata_y_estructura_casos.md):** Cobertura de 11 categorías ISTQB, mínimo 2 pasos atómicos, tags dinámicos, prohibición de `"Sanity"` en metadata ADO y formatos de 12 columnas, 18 columnas y XML.
+11. **[automatizacion_playwright_locators.md](../../rules/automatizacion_playwright_locators.md):** Prohibición absoluta de suponer locators (inspección obligatoria del DOM real vía `playwright-cli`), jerarquía de buenas prácticas Playwright antes de `.locator()`, prohibición de XPath salvo permiso explícito del usuario y adhesión estricta a la arquitectura existente del proyecto destino.
 
 ---
 
@@ -62,10 +63,11 @@ flowchart TD
     G3 -- Aprobado --> H[FASE 4 - Nivel 5: Formateo ADO y Exportación]
     H --> H1[Instanciar qa_ado_exporter: Generar casos_prueba_ID_HU_ado_import.csv 18 col]
     H1 --> H2{¿Usuario solicita Exportación Automatizada por API/MCP a ADO?}
-    H2 -- No --> I[FASE 5: Cierre, Actualización de Memorias y Entrega Final]
+    H2 -- No --> I[FASE 5 - Nivel 6 Opcional: Automatización E2E con qa_automation + playwright-cli]
     H2 -- Sí --> H3{Checkpoint 4: ¿Confirmar Resumen de Creación en ADO con XML Steps?}
     H3 -- Confirmado --> H4[Ejecutar Creación en ADO y Generar export_summary_ID_HU.md]
     H4 --> I
+    I --> J[FASE 6: Cierre, Actualización de Memorias y Entrega Final]
 ```
 
 ---
@@ -162,7 +164,20 @@ Actuar como **QA Lead Sr** evaluando el punto de partida y proponiendo al usuari
 
 ---
 
-### FASE 5: Cierre de Orquestación, Archivado y Sincronización de Memoria Maestra
+### FASE 5 (Nivel 6): Coordinación de Automatización y Mantenimiento con Playwright (`qa_automation`)
+
+#### Instrucciones de Ejecución:
+1. Cuando el usuario solicita automatizar casos de prueba o mantener tests existentes:
+   - Delegar en **[`qa_automation`](../qa_automation/SKILL.md)** en sinergia con **[`playwright-cli`](../playwright-cli/SKILL.md)**.
+   - **Origen de Casos:** Priorizar los casos diseñados en `output/testCases/<funcionalidad>/<ID_HU>/casos_prueba_<ID_HU>.csv` (o `_clasificados.md`); si no existen en el proyecto, tomar las indicaciones directas del usuario.
+2. **Auditoría del QA Lead Sr sobre `qa_automation`:**
+   - **Checkpoint 1 (Arquitectura y Plan):** Verificar con `inspect_playwright_project.js` que se respete al 100% la arquitectura existente del repositorio destino sin inventar carpetas ni patrones nuevos. Planificar junto al usuario cualquier duda.
+   - **Checkpoint 2 (Locators Reales del DOM):** Verificar que todos los locators provengan de la inspección del HTML real mediante `playwright-cli` (`snapshot`, `generate-locator`, `eval`), priorizando locators semánticos (`getByRole`, `getByLabel`, `getByText`, `getByTestId`) antes de `.locator()`, y prohibiendo XPath salvo autorización explícita del usuario.
+   - **Checkpoint 3 (Auditoría y Ejecución):** Ejecutar `node .agents/skills/qa_automation/scripts/audit_playwright_locators.js` y validar la corrida con `PLAYWRIGHT_HTML_OPEN=never npx playwright test`.
+
+---
+
+### FASE 6: Cierre de Orquestación, Archivado y Sincronización de Memoria Maestra
 
 Al concluir o pausar cualquier fase:
 1. Actualizar el contexto activo en `memories/qa_orchestrator/memoria_qa_orchestrator.md` siguiendo la plantilla `[template_memoria_orquestador.md](./resources/template_memoria_orquestador.md)` (manteniendo el patrón *Single-Writer* sin duplicar el inventario técnico de `input/index.json`).
@@ -175,13 +190,14 @@ Al concluir o pausar cualquier fase:
 
 El **QA Lead Sr (`qa_orchestrator`)** selecciona y ejecuta el proceso adecuado del catálogo de workflows según el requerimiento del usuario, aplicando **Smart Scaling** (1-2 HUs ejecución directa en sesión actual vs. 3+ HUs ejecución paralela con `run_workflow` y *File-Pointer Return*):
 
-- **Catálogo de los 6 Workflows Operativos (`WF-01` a `WF-06`):** `[catalogo_workflows_qa.md](./references/catalogo_workflows_qa.md)`
+- **Catálogo de los 7 Workflows Operativos (`WF-01` a `WF-07`):** `[catalogo_workflows_qa.md](./references/catalogo_workflows_qa.md)`
   - `WF-01`: Ingesta y Sincronización de Requerimientos (ADO + Figma).
   - `WF-02`: Refinamiento y Análisis Estático ISTQB (Individual o Lote).
   - `WF-03`: Diseño Funcional de Casos de Prueba (Desde Análisis Aprobado).
   - `WF-04`: Formateo y Exportación a Azure DevOps (Manual CSV o API XML).
   - `WF-05`: Pipeline E2E Completo (De Feature/HU a Casos Listos para ADO).
   - `WF-06`: Impacto Incremental por Cambio de Versión (`rev` Diff en ADO/Figma — máximo ahorro de tokens).
+  - `WF-07`: Automatización y Mantenimiento E2E con Playwright (`qa_automation` + `playwright-cli`).
 - **Scripts de Orquestación y Economía de Tokens:**
   - **Comparador Delta entre Revisiones de HU (`WF-06`):** `[diff_hu_versions.js](./scripts/diff_hu_versions.js)`
   - **Workflow Paralelo de Análisis Estático (`WF-02`, 3+ HUs):** `[batch_analytics_workflow.py](./scripts/batch_analytics_workflow.py)`
