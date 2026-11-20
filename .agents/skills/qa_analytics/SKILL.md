@@ -1,4 +1,4 @@
-﻿---
+---
 name: qa_analytics
 description: "Experto en análisis estático de requerimientos ISTQB para QA Senior. Analiza historias de usuario (HU) persistidas en input/, imágenes adjuntas de ADO, prototipos de Figma y contexto del negocio; triangula discrepancias entre las 3 fuentes; evalúa alcance por capa (FE Web/Mobile, BFF Web/Mobile y API agnóstica al canal), sistemas operativos y dispositivos (Smartphone, Tablet, iPad, Desktop); identifica ambigüedades por rol (AFU/UX, TL, PO); y genera reportes en output/analysis/<funcionalidad>/<ID_HU>/."
 ---
@@ -17,8 +17,10 @@ Este agente se rige estrictamente por las siguientes reglas del proyecto:
 3. **[memoria_agentica.md](../../rules/memoria_agentica.md):** Lectura previa y actualización al cierre en `memories/qa_analytics/memoria_qa_analytics.md`.
 4. **[arquitectura_insumos_tokens.md](../../rules/arquitectura_insumos_tokens.md):** Consulta prioritaria a `input/index.json` para cargar la versión local activa de la HU sin re-consultar los MCPs.
 5. **[triangulacion_visual_figma_ado.md](../../rules/triangulacion_visual_figma_ado.md):** Contraste cruzado obligatorio entre las 3 fuentes: 1) Texto escrito en la HU, 2) Imágenes adjuntas en ADO (`attachments/`) y 3) Prototipo vigente en Figma (`figma/screens/`).
-6. **[criterios_web_y_mobile.md](../../rules/criterios_web_y_mobile.md):** Distinción arquitectónica entre `FE` (Web/Mobile), `BFF` (puede ser Web y/o Mobile) y `API` (agnóstica al canal), además de criterios por Sistema Operativo (`Android`, `iOS`, `Windows`, `macOS`) y Dispositivo (`Smartphone`, `Tablet`, `iPad`, `Desktop`).
-7. **[reglas_y_restricciones_negocio.md](../../rules/reglas_y_restricciones_negocio.md):** Bimonetarismo (`$` vs `USD`), ciclo de vida/estados de ECHEQ, perfiles/permisos, feature flags y trazabilidad.
+6. **[criterios_web_y_mobile.md](../../rules/criterios_web_y_mobile.md):** Distinción arquitectónica entre `FE` (Web/Mobile), `BFF` (puede ser Web y/o Mobile) y `API` (agnóstica al canal), estrategia basada en riesgos (ISTQB RBT) por Sistema Operativo (`Android`, `iOS`, `Windows`, `macOS`) y Dispositivo (`Smartphone`, `Tablet Android`, `iPad`, `Desktop`), y **activación obligatoria de las skills especializadas por plataforma**:
+   - Si la HU es **`mobile` (`MB`)**: leer y aplicar **[`qa_istqb_mobile`](../qa_istqb_mobile/SKILL.md)** (variedad de SO y dispositivos, navegación nativa, *Safe Area*, teclados, red, ciclo de vida *Background/Foreground*, permisos, E2E con Web y estructuración RBT en `CORE`, `iOS` y `UI_TABLET`).
+   - Si la HU es **`web` (`WB`)**: leer y aplicar **[`qa_istqb_web`](../qa_istqb_web/SKILL.md)** (grillas, filtros, teclado/mouse/hover, sesión/pestañas/`F5`, exportación `.xlsx`/PDF, cross-browser y E2E con Mobile).
+7. **[reglas_y_restricciones_negocio.md](../../rules/reglas_y_restricciones_negocio.md):** Bimonetarismo (`$` vs `USD`), ciclo de vida/estados de ECHEQ, perfiles/permisos, feature flags y trazabilidad. *(Nota: Analizar únicamente la User Story y su Feature padre, excluyendo tasks internas de desarrollo salvo pedido explícito del usuario).*
 
 ---
 

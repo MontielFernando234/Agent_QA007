@@ -1,4 +1,4 @@
-﻿---
+---
 name: qa_ado_exporter
 description: "Especialista en transformación, formateo y exportación de casos de prueba a Azure DevOps (ADO). Toma el diseño funcional generado por qa_designer; genera el archivo CSV de 18 columnas RFC 4180 (casos_prueba_<ID_HU>_ado_import.csv) para importación manual por interfaz web; y a demanda explícita del usuario, transforma los pasos a XML (Microsoft.VSTS.TCM.Steps) y exporta los Test Cases directamente a Azure DevOps vinculándolos a la User Story mediante API/MCP, registrando los IDs generados en input/index.json."
 ---
@@ -86,13 +86,29 @@ Genera el archivo:
 
 ---
 
-### Modo 2: Exportación Automatizada por API/MCP (XML de Steps) — A Demanda
+### Modo 2: Exportación Automatizada por API/MCP (XML de Steps y Jerarquía de Suites) — A Demanda
 
 Cuando el usuario solicita explícitamente la exportación a Azure DevOps:
-1. El script `[export_to_ado_api.js](./scripts/export_to_ado_api.js)` procesa los casos de prueba, genera los bloques XML para `Microsoft.VSTS.TCM.Steps` y construye los payloads JSON Patch.
-2. Se crean los Work Items en Azure DevOps mediante el MCP `azure-devops` o la API REST.
-3. Se genera el reporte: `output/testCases/<funcionalidad>/<ID_HU>/export_summary_<ID_HU>.md` conteniendo la tabla de mapeo: Caso Diseñado -> ID Asignado en ADO (`#123456`) -> URL Directa.
-4. Se actualiza `input/index.json` con los IDs de los Test Cases creados.
+1. **Planificación y Confirmación Previa Obligatoria (`RULE[no_suposiciones.md]` y `RULE[human_in_the_loop.md]`):**
+   - Nunca asumir dónde ni con qué estructura cargar los casos. Consultar y confirmar siempre con el usuario:
+     - **`planId`** (ID del Test Plan) y **`suiteId`** (ID de la Suite Principal donde colgará la HU).
+     - **`Area Path`**, **`Iteration Path`** y **`Assigned To`**.
+     - **Estructura de Carpetas (Test Suites Estáticas):** Proponer la estructura estándar por defecto (o adoptar la que el usuario indique):
+       - Dentro de la Suite Principal (`suiteId`), crear una **Suite Estática** con nombre: **`"HU <ID_HU> - <Nombre HU>"`**.
+       - Dentro de `"HU <ID_HU> - <Nombre HU>"`, crear las carpetas correspondientes a las capas diseñadas:
+         - **`FE`** (para casos de Front-End):
+           - **En Mobile (`MB`):** dentro de `FE`, crear las subcarpetas **`CORE`**, **`iOS`** y **`UI_TABLET`**, e importar en cada una sus casos correspondientes.
+           - **En Web (`WB`):** importar los casos de Front-End directamente dentro de **`FE`** (salvo que el usuario indique otra sub-división).
+         - **`BFF`** *(si se diseñaron casos de BFF en Web o Mobile)*: importar allí los casos de BFF.
+         - **`API`** *(si se diseñaron casos de API)*: importar allí los casos de API.
+2. **Creación, Vinculación y Asignación:**
+   - Crear las suites estáticas acordadas mediante `testplan_test_suite_write` (`action: "create"`).
+   - Crear los Work Items de tipo `Test Case` con `wit_work_item_write` (o `export_to_ado_api.js`), serializando los pasos en XML dentro de `Microsoft.VSTS.TCM.Steps` *(evitando entidades `&quot;` / `&gt;` dentro de `parameterizedString` para prevenir doble escape HTML en ADO)* y mapeando todos los campos custom (`Custom.BPrioridadTC`, `Custom.BComplejidad`, `Custom.BCaminoPrueba`, `Custom.BTipoPrueba`, `Custom.BPlataformaPrueba`, `Custom.BPrecondiciones`, `System.Tags`).
+   - *(Recordar que los casos `1 - Smoke` NO llevan el tag `qa_feature_<modulo>_regression`).*
+   - Vincular todos los Test Cases creados a la User Story padre (`Microsoft.VSTS.Common.TestedBy-Reverse` / `type: "tests"`) mediante `wit_work_item_link_write`.
+   - Asignar cada grupo de Test Cases a su respectiva carpeta (`CORE`, `iOS`, `UI_TABLET`, `FE`, `BFF` o `API`) mediante `testplan_test_suite_write` (`action: "add_test_cases"`).
+3. Generar el reporte `output/testCases/<funcionalidad>/<ID_HU>/export_summary_<ID_HU>.md` conteniendo la jerarquía de suites creada y la tabla de mapeo: Caso Diseñado -> ID Asignado en ADO (`#123456`) -> Suite -> URL Directa.
+4. Actualizar `memories/qa_ado_exporter/memoria_qa_ado_exporter.md` (e `input/index.json` si aplica).
 
 ---
 

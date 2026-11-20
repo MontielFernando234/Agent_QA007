@@ -103,7 +103,7 @@ if (headers.length !== 12) {
     }
 }
 
-const titleRegex = /^(?:\[R\d+\]\s+)?(?:FE|BE)\s+-\s+(?:WB|MB|API|CS|DS|SP)\s+-\s+\d{3}\s+-\s+[A-Z0-9_]+\s+-\s+\d+\s+-\s+.+?\s+-\s+.+$/;
+const titleRegex = /^(?:\[R\d+\]\s+)?(?:FE|BE)\s+-\s+(?:WB|MB|API|CS|DS|SP)(?:\s+-\s+(?:AS|iOSS|TA|iPad))?\s+-\s+\d{3}\s+-\s+[A-Z0-9_]+\s+-\s+\d+\s+-\s+.+?\s+-\s+.+$/;
 const validTypes = new Set(['0 - Funcional', '1 - Smoke', '3 - Regression']);
 const validPaths = new Set(['Positivo', 'Negativo']);
 const validLevels = new Set(['1 - Alta', '2 - Media', '3 - Baja']);
@@ -153,8 +153,11 @@ dataRows.forEach((row, idx) => {
         errors.push(`Fila ${rowNum}: Bimonetarismo incorrecto (usar "USD" en lugar de "U$S" / "US$").`);
     }
 
-    if (nombre.startsWith('[R') && !tags.includes('regression')) {
-        warnings.push(`Fila ${rowNum}: El título indica Release [R...] pero Tags no incluye etiqueta de regresión.`);
+    if (nombre.startsWith('[R') && !tags.includes('regression') && !tags.includes('smoke')) {
+        warnings.push(`Fila ${rowNum}: El título indica Release [R...] pero Tags no incluye etiqueta de regresión ni de smoke.`);
+    }
+    if (tipo === '1 - Smoke' && tags.includes('regression')) {
+        warnings.push(`Fila ${rowNum}: El caso es "1 - Smoke" pero incluye el tag de regresión (los casos de Smoke solo deben llevar el tag _smoke, sin _regression).`);
     }
 
     if (!objetivo || !precond || !resultado) {

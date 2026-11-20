@@ -20,17 +20,19 @@ input/*
 !input/.gitkeep
 !input/web/
 !input/mobile/
+input/web/*
 !input/web/.gitkeep
+input/mobile/*
 !input/mobile/.gitkeep
-!input/index.json
-!input/INDEX.md
 
 # Salidas generadas por el flujo QA (análisis, casos de prueba CSV, etc.)
 output/*
 !output/.gitkeep
 !output/analysis/
 !output/testCases/
+output/analysis/*
 !output/analysis/.gitkeep
+output/testCases/*
 !output/testCases/.gitkeep
 
 # Memorias dinámicas de agentes (solo se preservan los .gitkeep de las carpetas)

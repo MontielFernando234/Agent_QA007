@@ -22,10 +22,12 @@ Este agente aplica obligatoriamente las siguientes reglas del proyecto:
 2. **[human_in_the_loop.md](../../rules/human_in_the_loop.md):** Control y aprobación del usuario en cada Checkpoint antes de pasar a la siguiente etapa.
 3. **[memoria_agentica.md](../../rules/memoria_agentica.md):** Lectura inicial y registro al cierre en `memories/qa_designer/memoria_qa_designer.md`.
 4. **[arquitectura_insumos_tokens.md](../../rules/arquitectura_insumos_tokens.md):** Lectura local de `output/analysis/` e `input/index.json` sin re-consultar MCPs.
-5. **[criterios_web_y_mobile.md](../../rules/criterios_web_y_mobile.md):** Distinción de diseño por capa (`FE` Web/Mobile, `BFF` Web y/o Mobile, y `API` sin distinción Web/Mobile) y validación con el usuario sobre cómo distribuir los casos por Sistema Operativo (`Android`, `iOS`, `Windows`, `macOS`) y Tipo de Dispositivo (`Smartphone`, `Tablet`, `iPad`, `Desktop`).
+5. **[criterios_web_y_mobile.md](../../rules/criterios_web_y_mobile.md):** Distinción de diseño por capa (`FE` Web/Mobile, `BFF` Web y/o Mobile, y `API` sin distinción Web/Mobile), aplicación de la estrategia **ISTQB Risk-Based Testing (RBT)** sin clonación innecesaria por dispositivo, y **consulta obligatoria de la skill especializada por plataforma**:
+   - Para **`mobile` (`MB`)**: leer y aplicar **[`qa_istqb_mobile`](../qa_istqb_mobile/SKILL.md)** (diseño en 3 suites RBT por defecto: `CORE` en dispositivo principal Tier 1 —default `Android Smartphone`—, `iOS` con Smoke + diferenciales nativos de iOS, y `UI_TABLET` con presentación/layout/navegación en `TA` e `iPad`).
+   - Para **`web` (`WB`)**: leer y aplicar **[`qa_istqb_web`](../qa_istqb_web/SKILL.md)** (diseño de suite Core `FE - WB` y diferenciales cross-browser/responsive basados en riesgo).
 6. **[reglas_y_restricciones_negocio.md](../../rules/reglas_y_restricciones_negocio.md):** Bimonetarismo (`$` vs `USD`), restricción sobre cheques vencidos grisados, perfiles/permisos, feature flags, preticket/comprobante y exportación `.xlsx`.
-7. **[nomenclatura_casos_prueba.md](../../rules/nomenclatura_casos_prueba.md):** Estructura obligatoria del título de cada Test Case (`[R<release>] [CAPA] - [PLATAFORMA] - [XXX] - [AREA] - [ID_HU] - [Nombre Corto HU] - [Título descriptivo]`).
-8. **[metadata_y_estructura_casos.md](../../rules/metadata_y_estructura_casos.md):** Cobertura de las 11 categorías ISTQB, mínimo 2 pasos atómicos por caso, catálogo de metadata, taxonomía dinámica de Tags (`QA_plataforma_web`, `QA_plataforma_mobile`, `QA_capa_api`), prohibición del tipo `"Sanity"` en metadata ADO y formato CSV de 12 columnas RFC 4180.
+7. **[nomenclatura_casos_prueba.md](../../rules/nomenclatura_casos_prueba.md):** Estructura obligatoria del título de cada Test Case (`[R<release>] [CAPA] - [PLATAFORMA] [- AS|iOSS|TA|iPad] - [XXX] - [AREA] - [ID_HU] - [funcionalidad] - [Título descriptivo]`), usando el slug de la funcionalidad sin inventar nombres y aplicando `[R<release>]` tanto en `3 - Regression` como en `1 - Smoke`.
+8. **[metadata_y_estructura_casos.md](../../rules/metadata_y_estructura_casos.md):** Cobertura de las 11 categorías ISTQB, **prohibición estricta de duplicar casos funcionales con casos de Smoke/Regresión** (cada escenario existe una única vez y si es candidato a Smoke o Regresión se clasifica directamente como tal), mínimo 2 pasos atómicos por caso, catálogo de metadata, taxonomía dinámica de Tags (**los casos `1 - Smoke` NO llevan el tag `_regression`**, aunque sí mantienen `[R<release>]` en el título), prohibición del tipo `"Sanity"` en metadata ADO y formato CSV de 12 columnas RFC 4180.
 
 ---
 
@@ -64,13 +66,15 @@ Analizar el informe generado por `qa_analytics`, alinear con el usuario los par�
    - **Release Objetivo:** (ej. `R19`, `R20`) para los casos candidatos a Regresión/Smoke.
    - **Código de Área en Nomenclatura:** Proponer **`CSM_SIF`** por defecto, confirmando con el usuario si desea mantenerlo o utilizar otro código.
    - **Alcance por Capas (`FE` / `BFF` / `API`):** Confirmar si se diseñarán casos solo de `FE` (`WB`/`MB`), o también de `BFF` (con distinción `WB` y/o `MB`) y/o `API` (sin distinción Web/Mobile).
-   - **Estrategia de Distribución por SO y Dispositivos (impacto en importación ADO):** Consultar al usuario cómo prefiere distribuir los casos de prueba para Sistemas Operativos (`Android`, `iOS`, `Windows`, `macOS`) y Dispositivos (`Smartphone`, `Tablet`, `iPad`, `Desktop`):
-     - *Opción A:* Unificados por plataforma general (`Mobile` / `Web`).
-     - *Opción B:* Casos desglosados/duplicados por Sistema Operativo (`Android` vs. `iOS`).
-     - *Opción C:* Casos desglosados por combinación de Dispositivo + SO (`Smartphone Android/iOS`, `Tablet Android`, `iPad`).
-3. **Desglose en las 11 Categorías ISTQB (`RULE[metadata_y_estructura_casos.md]`):**
-   Aplicar Partición de Equivalencia, Valores Límite, Transición de Estados y Tablas de Decisión para listar los escenarios en las 11 categorías:
-   `1. Positivos`, `2. Negativos`, `3. Reglas de negocio`, `4. Navegación`, `5. Validaciones visuales`, `6. Permisos`, `7. Mensajes de error`, `8. Casos borde`, `9. Regresión`, `10. Sanity`, `11. Smoke`.
+   - **Estrategia de Distribución Basada en Riesgos (ISTQB RBT — `RULE[criterios_web_y_mobile.md]`):**
+     - **En Mobile (`MB`):** Proponer por defecto las **3 Suites Basadas en Riesgos** según [`qa_istqb_mobile`](../qa_istqb_mobile/SKILL.md) (confirmando con el usuario si mantiene esta estructura por defecto o desea otra):
+       1. `CORE` (`_CORE.csv`): Reglas y funcionalidades de negocio independientes del SO/dispositivo (ejecutadas en el dispositivo principal Tier 1, por defecto `Android Smartphone`).
+       2. `iOS` (`_SO_iOS.csv`): Smoke del flujo crítico + pruebas específicas del SO secundario (`iOSS`).
+       3. `UI_TABLET` (`_UI_TABLET.csv`): Navegación, presentación Figma, *Portrait/Landscape* y compatibilidad de formato de pantalla en `Tablet Android` (`TA`) e `iPad`.
+     - **En Web (`WB`):** Aplicar [`qa_istqb_web`](../qa_istqb_web/SKILL.md) con suite principal `FE - WB` (y `BFF` / `API` si se diseñan) más casos cross-browser/responsive basados en riesgo.
+3. **Desglose en las 11 Categorías ISTQB sin Duplicidad (`RULE[metadata_y_estructura_casos.md]`):**
+   - Aplicar Partición de Equivalencia, Valores Límite, Transición de Estados y Tablas de Decisión cubriendo las 11 categorías (`1. Positivos`, `2. Negativos`, `3. Reglas de negocio`, `4. Navegación`, `5. Validaciones visuales`, `6. Permisos`, `7. Mensajes de error`, `8. Casos borde`, `9. Regresión`, `10. Sanity`, `11. Smoke`).
+   - **Cero Duplicidad entre Funcionales y Smoke/Regresión:** No crear un caso funcional y otro clonado para Regresión o Smoke. Promover directamente los escenarios críticos a `1 - Smoke` o `3 - Regression` (con prefijo `[R<release>]`), dado que en la primera corrida se ejecuta la suite completa y en regresiones/smokes posteriores se filtran los casos catalogados así.
 4. **Punto de Control (Checkpoint 1):** Presentar la propuesta de escenarios junto con las preguntas de configuración (Release, Área `CSM_SIF`, Capas y Distribución por SO/Dispositivos) y esperar confirmación del usuario.
 
 ---

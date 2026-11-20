@@ -138,7 +138,13 @@ for (const row of dataRows) {
     const nombre = colIndex.nombre !== -1 ? row[colIndex.nombre].trim() : "Test Case";
     const objetivo = colIndex.objetivo !== -1 ? row[colIndex.objetivo].trim() : "";
     let precondiciones = colIndex.precondiciones !== -1 ? row[colIndex.precondiciones].trim() : "";
-    precondiciones = precondiciones.replace(/(\r?\n)+/g, '; ').replace(/;\s*;/g, ';').replace(/^\d+\.\s*/gm, '').trim();
+    precondiciones = precondiciones
+        .replace(/\\n\d+\.\s*/g, '; ')
+        .replace(/\\n/g, '; ')
+        .replace(/(\r?\n)+/g, '; ')
+        .replace(/;\s*;/g, ';')
+        .replace(/^\d+\.\s*/gm, '')
+        .trim();
 
     const pasosRaw = colIndex.pasos !== -1 ? row[colIndex.pasos].trim() : "";
     const resultado = colIndex.resultado !== -1 ? row[colIndex.resultado].trim() : "";
@@ -159,7 +165,10 @@ for (const row of dataRows) {
     if (!tagList.includes(platformTag)) tagList.push(platformTag);
     const smokeTag = `${featureTag}_smoke`;
     const regTag = `${featureTag}_regression`;
-    if ((tagList.includes(smokeTag) || nombre.startsWith('[R')) && !tagList.includes(regTag)) {
+    if (tipoPrueba.toLowerCase().includes('smoke')) {
+        tagList = tagList.filter(t => t !== regTag);
+        if (!tagList.includes(smokeTag)) tagList.push(smokeTag);
+    } else if ((tipoPrueba.toLowerCase().includes('regression') || nombre.startsWith('[R')) && !tagList.includes(regTag)) {
         tagList.push(regTag);
     }
     tags = tagList.join(';');

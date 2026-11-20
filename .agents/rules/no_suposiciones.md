@@ -1,6 +1,5 @@
 ---
 trigger: always_on
-description: "Regla de Oro de Cero Suposiciones en todas las fases del orquestador QA (Importación ADO/Figma, Análisis Estático, Diseño de Casos y Exportación)."
 ---
 
 # Regla: Cero Suposiciones (`RULE[no_suposiciones.md]`)
@@ -19,15 +18,18 @@ Ningún agente del ecosistema QA puede **asumir, inventar o completar silenciosa
    - Si `input/<plat>/<func>/<ID_HU>/figma/screens/` ya tiene imágenes, **jamás sobrescribirlas sin preguntar** (consultar si sobrescribe, agrega nuevas o conserva).
    - En secciones con múltiples frames, listar las pantallas detectadas y confirmar cuáles descargar.
 3. **Análisis Estático (`qa_analytics`):**
+   - Analizar únicamente la **User Story** (y su contexto de Feature), sin incluir tasks internas de desarrollo salvo pedido explícito del usuario.
    - Ante cualquier laguna o discrepancia entre **Texto HU**, **Adjuntos ADO** y **Figma**, no elegir arbitrariamente cuál prevalece. Formular preguntas explícitas clasificadas por rol:
      - **AFU / UX:** Reglas de negocio, flujos funcionales y diferencias HU vs. Figma.
      - **TL:** Contratos API, lógica BFF, códigos HTTP, timeouts e integraciones.
      - **PO:** Alcance funcional, priorización, feature flags y criterios faltantes.
 4. **Diseño de Casos (`qa_designer`):**
-   - Consultar/confirmar siempre con el usuario: **1) Release** (`[R<N>]`), **2) Código de Área** (proponer `CSM_SIF` por defecto, pero confirmar siempre), **3) Capas** (`FE`, `BFF`, `API`) y **4) Distribución por SO y Dispositivos** (`Android`/`iOS`, `Smartphone`/`Tablet`/`iPad`/`Desktop`).
+   - Consultar/confirmar siempre con el usuario: **1) Release** (`[R<N>]`), **2) Código de Área** (proponer `CSM_SIF` por defecto, pero confirmar siempre), **3) Capas** (`FE`, `BFF`, `API`) y **4) Estrategia de distribución basada en riesgos (ISTQB RBT)** (proponer por defecto en Mobile las 3 suites `CORE`, `iOS`, `UI_TABLET` con `Android Smartphone` como dispositivo principal Tier 1, confirmando con el usuario).
+   - Usar el slug de la funcionalidad/feature (ej. `consulta_echeq`) como nombre corto en la nomenclatura sin inventar nombres.
    - Registrar dudas pendientes en `output/testCases/<func>/<ID_HU>/dudas_pendientes_diseno.md`.
 5. **Exportación ADO (`qa_ado_exporter`):**
-   - **Jamás crear Work Items en ADO vía API/MCP automáticamente.** Por defecto solo generar el CSV local de 18 columnas. La creación por API/MCP requiere solicitud explícita y aprobación del Checkpoint de resumen.
+   - **Jamás crear Work Items ni Test Suites en ADO vía API/MCP automáticamente.** Por defecto solo generar los CSVs locales de 18 columnas.
+   - Para exportar por API/MCP a Azure DevOps, **planificar y consultar siempre con el usuario**: `planId`, `suiteId` principal destino, `Iteration Path`, `Area Path`, `Assigned To` y la **estructura de carpetas de Test Suites** (proponiendo por defecto: `"HU <ID> - <Nombre HU>"` → `FE` [en Mobile con subcarpetas `CORE`, `iOS`, `UI_TABLET`] / `BFF` / `API`, o la estructura que el usuario indique).
 6. **Automatización E2E con Playwright (`qa_automation`):**
    - **Jamás suponer ni inventar locators.** Todo selector debe verificarse inspeccionando el HTML/DOM real de la aplicación mediante `playwright-cli`. Priorizar buenas prácticas (`getByRole`, `getByLabel`, `getByPlaceholder`, `getByText`, `getByTestId`); solo usar `.locator()` con CSS estable cuando aquellos no alcancen. **Prohibido usar XPath** salvo autorización explícita del usuario.
    - **Jamás inventar una arquitectura nueva.** Seguir estrictamente los lineamientos, estructura de carpetas, Page Objects, fixtures y convenciones del proyecto destino. Ante cualquier duda o vacío arquitectónico, planificar junto al usuario antes de escribir código.
